@@ -28,7 +28,7 @@
 #include <cmath>
 #include <initializer_list>
 
-#include "geo/Types/geometry/QuaternionBaseArrayAc.hpp"
+#include "lib/fprime-geometry-types/geometry/Types/QuaternionBaseArrayAc.hpp"
 
 #include "../Matrix/Matrix.hpp"
 #include "../Vector/Vector.hpp"

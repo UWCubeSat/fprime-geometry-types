@@ -29,7 +29,7 @@
 
 #include "Fw/DataStructures/Array.hpp"
 
-#include "geo/Types/geometry/Vector3DBaseArrayAc.hpp"
+#include "lib/fprime-geometry-types/geometry/Types/Vector3DBaseAc.hpp"
 
 namespace geo {
 
