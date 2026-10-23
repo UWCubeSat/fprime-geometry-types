@@ -1,7 +1,7 @@
 
 # fprime-geometry-types
 
-This project contains the generic geometry types with specific F' integration, broken out from the main HS2-CDH repo as they are project-agnostic. See https://github.com/UWCubeSat/HS2-CDH for further details.
+This project contains the generic geometry types with specific F' integration, broken out from the main HS2-CDH repo as they are project-agnostic. See https://github.com/UWCubeSat/fprime-geometry-types for further details.
 
 
 Required tools:
@@ -19,7 +19,7 @@ pip install fprime-tools fprime-gds
 Clone the repository:
 
 git clone https://github.com/UWCubeSat/fprime-geometry-types.git
-cd HS2-CDH
+cd fprime-geometry-types
 
 Initialize the F Prime submodule:
 
@@ -54,7 +54,7 @@ Tests can be run with:
 
 Coverage for project components (recommended):
 
-    fprime-util check --coverage --path geometry/ --recursive
+    fprime-util check --coverage --path geo/ --recursive
 
 
 ## Formatting
