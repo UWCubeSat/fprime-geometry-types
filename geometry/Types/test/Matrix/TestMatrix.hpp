@@ -21,7 +21,7 @@ std::array<std::array<float, N>, N> rand_matrix() noexcept {
 }
 
 #define MATRIX_ARR_COMP(mat, arr)                                                                                   \
-    static_assert(std::pow(mat.n(), 2) == sizeof(arr) / sizeof(arr[0][0]));                                         \
+    static_assert(mat.n() * mat.n() == sizeof(arr) / sizeof(arr[0][0]));                                            \
     for (FwSizeType i = 0; i < mat.n(); i++) {                                                                      \
         for (FwSizeType j = 0; j < mat.n(); j++) {                                                                  \
             EXPECT_FLOAT_EQ(arr[i][j], mat.cell(i, j))                                                              \
