@@ -115,6 +115,7 @@ TEST(Vector_tests, comparison_equals_false) {
 
     for (FwSizeType i = 0; i < 3; i++) {
         comp_vec_3[i]++;
+        comp_vec_3_F64[i]++;
         comp_vec_3D[i]++;
 
         for (FwSizeType j = 0; j < 3; j++) {
@@ -148,7 +149,7 @@ TEST(Vector_tests, mut_indexed_access) {
 
     for (FwSizeType i = 0; i < 3; i++) {
         EXPECT_FLOAT_EQ(rand_dat[i], test_vec_3[i]) << "Vector<3> index: " << static_cast<int>(i);
-        EXPECT_NE(rand_dat_F64[i], rand_dat_F64[i]) << "Vector<3, F64> index: " << static_cast<int>(i);
+        EXPECT_FLOAT_EQ(rand_dat_F64[i], rand_dat_F64[i]) << "Vector<3, F64> index: " << static_cast<int>(i);
         EXPECT_FLOAT_EQ(rand_dat[i], test_vec_3D[i]) << "Vector3D index: " << static_cast<int>(i);
     }
 }
@@ -238,35 +239,35 @@ TEST(Vector_tests, named_assignment) {
     geo::Vector3D test_vec_3D(rand_dat);
 
     test_vec_3.x() += diffs[0];
-    test_vec_3_F64.x() += diffs[0];
+    test_vec_3_F64.x() += diffs_F64[0];
     test_vec_3D.x() += diffs[0];
 
     test_vec_3.y() += diffs[1];
-    test_vec_3_F64.y() += diffs[1];
+    test_vec_3_F64.y() += diffs_F64[1];
     test_vec_3D.y() += diffs[1];
 
     test_vec_3.z() += diffs[2];
-    test_vec_3_F64.z() += diffs[2];
+    test_vec_3_F64.z() += diffs_F64[2];
     test_vec_3D.z() += diffs[2];
 
     EXPECT_FLOAT_EQ(rand_dat[0] + diffs[0], test_vec_3.x());  // 3
     EXPECT_FLOAT_EQ(test_vec_3[0], test_vec_3.x());
     EXPECT_FLOAT_EQ(rand_dat_F64[0] + diffs_F64[0], test_vec_3_F64.x());  // 3, F64
-    EXPECT_FLOAT_EQ(test_vec_3D[0], test_vec_3_F64.x());
+    EXPECT_FLOAT_EQ(test_vec_3_F64[0], test_vec_3_F64.x());
     EXPECT_FLOAT_EQ(rand_dat[0] + diffs[0], test_vec_3D.x());  // 3D
     EXPECT_FLOAT_EQ(test_vec_3D[0], test_vec_3D.x());
 
     EXPECT_FLOAT_EQ(rand_dat[1] + diffs[1], test_vec_3.y());
     EXPECT_FLOAT_EQ(test_vec_3[1], test_vec_3.y());
     EXPECT_FLOAT_EQ(rand_dat_F64[1] + diffs_F64[1], test_vec_3_F64.y());  // 3, F64
-    EXPECT_FLOAT_EQ(test_vec_3D[1], test_vec_3_F64.y());
+    EXPECT_FLOAT_EQ(test_vec_3_F64[1], test_vec_3_F64.y());
     EXPECT_FLOAT_EQ(rand_dat[1] + diffs[1], test_vec_3D.y());
     EXPECT_FLOAT_EQ(test_vec_3D[1], test_vec_3D.y());
 
     EXPECT_FLOAT_EQ(rand_dat[2] + diffs[2], test_vec_3.z());
     EXPECT_FLOAT_EQ(test_vec_3[2], test_vec_3.z());
     EXPECT_FLOAT_EQ(rand_dat_F64[2] + diffs_F64[2], test_vec_3_F64.z());  // 3, F64
-    EXPECT_FLOAT_EQ(test_vec_3D[2], test_vec_3_F64.z());
+    EXPECT_FLOAT_EQ(test_vec_3_F64[2], test_vec_3_F64.z());
     EXPECT_FLOAT_EQ(rand_dat[2] + diffs[2], test_vec_3D.z());
     EXPECT_FLOAT_EQ(test_vec_3D[2], test_vec_3D.z());
 }
@@ -281,13 +282,16 @@ TEST(Vector_tests, pos_magnitude) {
     const geo::Vector3D test_vec_3D(rand_dat);
 
     float exp_mag = 0;
+    F64 exp_mag_F64 = 0;
     for (FwSizeType i = 0; i < 3; i++) {
         exp_mag += std::pow(rand_dat[i], 2);
+        exp_mag_F64 += std::pow(rand_dat_F64[i], 2);
     }
     exp_mag = std::sqrt(exp_mag);
+    exp_mag_F64 = std::sqrt(exp_mag_F64);
 
     EXPECT_FLOAT_EQ(exp_mag, test_vec_3.magnitude());
-    EXPECT_FLOAT_EQ(exp_mag, test_vec_3_F64.magnitude());
+    EXPECT_FLOAT_EQ(exp_mag_F64, test_vec_3_F64.magnitude());
     EXPECT_FLOAT_EQ(exp_mag, test_vec_3D.magnitude());
 }
 TEST(Vector_tests, neg_magnitude) {
@@ -305,13 +309,16 @@ TEST(Vector_tests, neg_magnitude) {
     }
 
     float exp_mag = 0;
+    F64 exp_mag_F64 = 0;
     for (FwSizeType i = 0; i < 3; i++) {
         exp_mag += std::pow(rand_dat[i], 2);
+        exp_mag_F64 += std::pow(rand_dat_F64[i], 2);
     }
     exp_mag = std::sqrt(exp_mag);
+    exp_mag_F64 = std::sqrt(exp_mag_F64);
 
     EXPECT_FLOAT_EQ(exp_mag, test_vec_3.magnitude());
-    EXPECT_FLOAT_EQ(exp_mag, test_vec_3_F64.magnitude());
+    EXPECT_FLOAT_EQ(exp_mag_F64, test_vec_3_F64.magnitude());
     EXPECT_FLOAT_EQ(exp_mag, test_vec_3D.magnitude());
 }
 
@@ -331,7 +338,8 @@ TEST(Vector_tests, scaling_scales_all_elem) {
 
     for (FwSizeType i = 0; i < 3; i++) {
         EXPECT_FLOAT_EQ(rand_dat[i] * scale_factor, test_vec_3[i]) << "Vector<3> index: " << static_cast<int>(i);
-        EXPECT_FLOAT_EQ(rand_dat_F64[i], test_vec_3_F64[i]) << "Vector<3, F64> index: " << static_cast<int>(i);
+        EXPECT_FLOAT_EQ(rand_dat_F64[i] * double{scale_factor}, test_vec_3_F64[i])
+            << "Vector<3, F64> index: " << static_cast<int>(i);
         EXPECT_FLOAT_EQ(rand_dat[i] * scale_factor, test_vec_3D[i]) << "Vector3D index: " << static_cast<int>(i);
     }
 }
@@ -389,26 +397,27 @@ TEST(Vector_tests, norm_doesnt_change_mag_of_1) {
     geo::Vector3D test_vec_3D(rand_dat);
 
     EXPECT_FLOAT_EQ(test_vec_3.magnitude(), test_vec_3D.magnitude());
-    EXPECT_FLOAT_EQ(static_cast<F64>(test_vec_3.magnitude()), test_vec_3_F64.magnitude());
     const auto mag = test_vec_3.magnitude();
+    const auto mag_F64 = test_vec_3_F64.magnitude();
 
     test_vec_3.normalize();
     test_vec_3_F64.normalize();
     test_vec_3D.normalize();
     EXPECT_FLOAT_EQ(1.f, test_vec_3.magnitude());
-    EXPECT_FLOAT_EQ(1.f, test_vec_3_F64.magnitude());
+    EXPECT_FLOAT_EQ(double{1}, test_vec_3_F64.magnitude());
     EXPECT_FLOAT_EQ(1.f, test_vec_3D.magnitude());
 
     test_vec_3.normalize();
     test_vec_3_F64.normalize();
     test_vec_3D.normalize();
     EXPECT_FLOAT_EQ(1.f, test_vec_3.magnitude());
-    EXPECT_FLOAT_EQ(1.f, test_vec_3_F64.magnitude());
+    EXPECT_FLOAT_EQ(double{1}, test_vec_3_F64.magnitude());
     EXPECT_FLOAT_EQ(1.f, test_vec_3D.magnitude());
 
     for (FwSizeType i = 0; i < 3; i++) {
         EXPECT_FLOAT_EQ(rand_dat[i] / mag, test_vec_3[i]) << "Vector<3> index: " << static_cast<int>(i);
-        EXPECT_FLOAT_EQ(rand_dat_F64[i] / mag, test_vec_3_F64[i]) << "Vector<3, F64> index: " << static_cast<int>(i);
+        EXPECT_FLOAT_EQ(rand_dat_F64[i] / mag_F64, test_vec_3_F64[i])
+            << "Vector<3, F64> index: " << static_cast<int>(i);
         EXPECT_FLOAT_EQ(rand_dat[i] / mag, test_vec_3D[i]) << "Vector3D index: " << static_cast<int>(i);
     }
 }
