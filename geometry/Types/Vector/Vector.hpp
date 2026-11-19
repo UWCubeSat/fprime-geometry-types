@@ -25,6 +25,7 @@
 #define GEOMETRY_TYPES_GEO_VECTOR_VECTOR_HPP_
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 #include "Fw/DataStructures/Array.hpp"
@@ -46,7 +47,7 @@ class Vector : public VECTOR_CONTAINER {
     static_assert(std::is_floating_point<VECTOR_FLOAT>::value, "the Vector datatype must be floating point");
 
     static_assert(
-        (N == 3 || N == 9) && (std::is_same<VECTOR_FLOAT, float>::value) &&
+        (N == 3 || N == 9) && (std::is_same<VECTOR_FLOAT, float>::value || std::is_same<VECTOR_FLOAT, F64>::value) &&
             (std::is_same<VECTOR_CONTAINER, std::array<VECTOR_FLOAT, N>>::value ||
              std::is_same<VECTOR_CONTAINER, Vector3DBase>::value),
         "Only allow instantiations of Vector<...> that already have unit tests written. If you need a new type of "
@@ -161,7 +162,7 @@ class Vector : public VECTOR_CONTAINER {
      * Allows read access to the element at index i of the vector with bounds checking.
      * @param i the vector index
      * @return element at index
-     * 
+     *
      */
     VECTOR_FLOAT operator[](const uint8_t i) const {
         if constexpr (!std::is_same<VECTOR_CONTAINER,
