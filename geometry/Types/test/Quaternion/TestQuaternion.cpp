@@ -9,6 +9,15 @@ namespace geo {
 // NOTE: default generators copy, move, copy=, and move= ctor's are not tested because these tests are effectively
 // testing the compiler
 // ctor's
+TEST(Quaternion_tests, defualt_ctor) {
+    const Quaternion q_default;
+
+    EXPECT_FLOAT_EQ(1.0, q_default.w());
+    EXPECT_FLOAT_EQ(0, q_default.x());
+    EXPECT_FLOAT_EQ(0, q_default.y());
+    EXPECT_FLOAT_EQ(0, q_default.z());
+
+}
 TEST(Quaternion_tests, ctor_c_arr) {
     const auto quat_dat = generate_quat();
     float imaginary[3];

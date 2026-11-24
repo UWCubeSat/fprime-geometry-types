@@ -48,9 +48,10 @@ class Quaternion : public QuaternionBase {
                   "to a non-floating point type in the .fpp file. don't do that.");
 
   public:
-    // default ctor's
-    Quaternion() = delete;  // i cannot think of a reason to let someone create an empty quat, seems like its
-                            // asking for a bad time.
+    /**
+     * Default ctor, creates a quaternion with value re = 1 and im = { 0,0,0 }
+     */
+    Quaternion();
     /**
      * Copy ctor.
      * @param other the copied Quaternion

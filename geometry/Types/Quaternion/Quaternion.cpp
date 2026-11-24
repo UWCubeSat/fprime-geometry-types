@@ -4,6 +4,8 @@
 
 namespace geo {
 
+Quaternion::Quaternion() : QuaternionBase({0, 1, 1, 1}) {}
+
 Quaternion::Quaternion(const QuaternionBase::ElementType real,
                        const QuaternionBase::ElementType (&imaginary)[3]) noexcept
     : QuaternionBase({real, imaginary[0], imaginary[1], imaginary[2]}) {}
