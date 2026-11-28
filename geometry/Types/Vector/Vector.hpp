@@ -359,11 +359,11 @@ template <typename VEC_IN,
 template <U8 N, typename OUT_FLOAT, typename OUT_CONT = std::array<OUT_FLOAT, N>, typename VEC_IN>
 Vector<N, OUT_FLOAT, OUT_CONT> vector_cast(const VEC_IN& in) noexcept {
     static_assert(in.n() == N, "dimension must be the same");
-
     Vector<N, OUT_FLOAT, OUT_CONT> out{};
     for (U8 i = 0; i < in.n(); i++) {
         out[i] = static_cast<OUT_FLOAT>(in[i]);
     }
+    return out;
 }
 
 using Vector3D = Vector<3, Vector3DBase::ElementType, Vector3DBase>;
