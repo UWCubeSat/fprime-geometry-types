@@ -26,7 +26,6 @@
 
 #include <array>
 #include <cmath>
-#include <initializer_list>
 
 #include "lib/fprime-geometry-types/geometry/Types/QuaternionBaseArrayAc.hpp"
 

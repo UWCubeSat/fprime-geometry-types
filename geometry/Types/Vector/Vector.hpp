@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <type_traits>
 
 #include "Fw/DataStructures/Array.hpp"
 
@@ -41,7 +42,7 @@ namespace geo {
  * @tparam VECTOR_FLOAT the floating point type to use for each vector value
  * @tparam VECTOR_CONTAINER the container used to store the vector values
  */
-template <uint8_t N, typename VECTOR_FLOAT = F32, typename VECTOR_CONTAINER = std::array<VECTOR_FLOAT, N>>
+template <uint8_t N, typename VECTOR_FLOAT = F32, class VECTOR_CONTAINER = std::array<VECTOR_FLOAT, N>>
 class Vector : public VECTOR_CONTAINER {
     static_assert(N > 1, "cannot create 1-dimensional Vector");
     static_assert(std::is_floating_point<VECTOR_FLOAT>::value, "the Vector datatype must be floating point");
@@ -54,6 +55,8 @@ class Vector : public VECTOR_CONTAINER {
         "vector (new dimension, new floating_t, new container_t), ensure that type has appropriate test coverage.");
 
   public:
+    using VECTOR_FLOAT_T = VECTOR_FLOAT;
+
     // ctor / dtor
     /**
      * Default ctor.
@@ -122,6 +125,18 @@ class Vector : public VECTOR_CONTAINER {
      * @returns num elements.
      */
     constexpr uint8_t n() const noexcept { return N; }
+
+    /**
+     * Returns true if all elements in the vector ar finite
+     * @returns finiteness.
+     */
+    constexpr bool all_finite() const noexcept {
+        for (U8 i = 0; i < this->n(); i++) {
+            if (!std::isfinite(this->operator[](i)))
+                return false;
+        }
+        return true;
+    }
 
     // comparisons
     /**
@@ -327,6 +342,29 @@ class Vector : public VECTOR_CONTAINER {
      */
     Vector operator/(const VECTOR_FLOAT scalar) const noexcept { return this->scale(VECTOR_FLOAT(1.0) / scalar); }
 };
+/*
+template <typename, typename>
+constexpr bool is_same_template{false};
+
+template <template <typename...> class T,  // typename T in C++17
+          typename... A,
+          typename... B>
+constexpr bool is_same_template<T<A...>, T<B...>>{true};
+
+template <typename VEC_IN,
+          typename VEC_OUT,
+          typename = std::enable_if<is_same_template<VEC_IN, Vector<3, F32, std::array<F32, 3>>> &&
+                                    is_same_template<VEC_OUT, Vector<3, F32, std::array<F32, 3>>>>>
+                                    */
+template <U8 N, typename OUT_FLOAT, typename OUT_CONT = std::array<OUT_FLOAT, N>, typename VEC_IN>
+Vector<N, OUT_FLOAT, OUT_CONT> vector_cast(const VEC_IN& in) noexcept {
+    static_assert(in.n() == N, "dimension must be the same");
+
+    Vector<N, OUT_FLOAT, OUT_CONT> out{};
+    for (U8 i = 0; i < in.n(); i++) {
+        out[i] = static_cast<OUT_FLOAT>(in[i]);
+    }
+}
 
 using Vector3D = Vector<3, Vector3DBase::ElementType, Vector3DBase>;
 
